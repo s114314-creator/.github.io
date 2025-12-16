@@ -75,6 +75,15 @@
   <h1>🐹 打地鼠遊戲</h1>
   <p>看到地鼠就點牠</p>
 
+  <div style="display:flex; justify-content:center; gap:30px; margin-top:20px;">
+    <div style="font-size:18px; padding:10px 20px; border:2px solid #333; background:#fff;">
+      分數：<span id="score">0</span>
+    </div>
+    <button id="stopBtn" style="font-size:16px; padding:10px 20px; cursor:pointer;">
+      停止遊戲
+    </button>
+  </div>
+
   <div class="game">
     <div class="hole"><div class="mole"><div class="eye left"></div><div class="eye right"></div><div class="nose"></div></div></div>
     <div class="hole"><div class="mole"><div class="eye left"></div><div class="eye right"></div><div class="nose"></div></div></div>
@@ -87,27 +96,57 @@
     <div class="hole"><div class="mole"><div class="eye left"></div><div class="eye right"></div><div class="nose"></div></div></div>
   </div>
 
-  <script>
-    const moles = document.querySelectorAll('.mole');
-    let current = -1;
+  <audio id="hitSound">
+  <source src="https://www.soundjay.com/buttons/sounds/button-09.mp3" type="audio/mpeg">
+</audio>
 
-    function showMole() {
-      // 全部藏起來
-      moles.forEach(m => m.style.display = 'none');
+<script>
+  const moles = document.querySelectorAll('.mole');
+  const scoreEl = document.getElementById('score');
+  const stopBtn = document.getElementById('stopBtn');
+  const sound = document.getElementById('hitSound');
 
-      // 換一隻（輪流）
-      current = (current + 1) % moles.length;
-      moles[current].style.display = 'block';
-    }
+  let current = -1;
+  let score = 0;
+  let timer = null;
 
-    moles.forEach(mole => {
-      mole.addEventListener('click', () => {
+  function showMole() {
+    // 全部藏起來
+    moles.forEach(m => m.style.display = 'none');
+
+    // 隨機選一隻地鼠
+    let next;
+    do {
+      next = Math.floor(Math.random() * moles.length);
+    } while (next === current); // 避免連續同一隻
+
+    current = next;
+    moles[current].style.display = 'block';
+  }
+
+  moles.forEach(mole => {
+    mole.addEventListener('click', () => {
+      if (mole.style.display === 'block') {
+        score++;
+        scoreEl.textContent = score;
         mole.style.display = 'none';
-      });
+        sound.currentTime = 0;
+        sound.play();
+      }
     });
+  });
 
-    setInterval(showMole, 800);
-  </script>
+  function startGame() {
+    timer = setInterval(showMole, 800);
+  }
+
+  stopBtn.addEventListener('click', () => {
+    clearInterval(timer);
+    moles.forEach(m => m.style.display = 'none');
+  });
+
+  startGame();
+</script>
 
 </body>
 </html>
