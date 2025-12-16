@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <title>打地鼠遊戲（完整版）</title>
+  <title>打地鼠遊戲（直接開始版）</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -128,7 +128,9 @@
     });
 
     function startGame() {
-      timer = setInterval(showMole, 800);
+      if (!timer) {
+        timer = setInterval(showMole, 800);
+      }
     }
 
     stopBtn.addEventListener('click', () => {
@@ -146,7 +148,8 @@
       startGame();
     });
 
-    startGame();
+    // 進入網頁就直接開始
+    window.addEventListener('load', startGame);
   </script>
 
 </body>
