@@ -10,112 +10,115 @@
   </body>
 </html>
 <!DOCTYPE html>
-width: 100px;
-height: 100px;
-background: #8b5a2b;
-border-radius: 50%;
-position: absolute;
-bottom: -110px;
-left: 20px;
-transition: bottom 0.25s;
-cursor: pointer;
-}
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>打地鼠（超穩定新手版）</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      text-align: center;
+    }
 
+    h1 {
+      margin-top: 20px;
+    }
 
-/* 地鼠臉 */
-.mole::before,
-.mole::after {
-content: '';
-position: absolute;
-top: 30px;
-width: 12px;
-height: 12px;
-background: black;
-border-radius: 50%;
-}
+    /* 遊戲區 */
+    .game {
+      display: grid;
+      grid-template-columns: repeat(3, 120px);
+      gap: 15px;
+      justify-content: center;
+      margin-top: 30px;
+    }
 
+    /* 洞（格子一定看得到） */
+    .hole {
+      width: 120px;
+      height: 120px;
+      border: 3px solid #333;
+      background: #ddd;
+      position: relative;
+    }
 
-.mole::before {
-left: 28px; /* 左眼 */
-}
+    /* 地鼠 */
+    .mole {
+      width: 80px;
+      height: 80px;
+      background: brown;
+      border-radius: 50%;
+      position: absolute;
+      bottom: 10px;
+      left: 20px;
+      display: none; /* 預設不顯示 */
+      cursor: pointer;
+    }
 
+    /* 眼睛 */
+    .eye {
+      width: 8px;
+      height: 8px;
+      background: black;
+      border-radius: 50%;
+      position: absolute;
+      top: 25px;
+    }
 
-.mole::after {
-right: 28px; /* 右眼 */
-}
+    .eye.left { left: 22px; }
+    .eye.right { right: 22px; }
 
-
-/* 鼻子 */
-.nose {
-position: absolute;
-width: 10px;
-height: 8px;
-background: pink;
-border-radius: 50%;
-top: 50px;
-left: 45px;
-}
-
-
-/* 地鼠冒出 */
-.hole.up .mole {
-bottom: 15px;
-}
-</style>
+    /* 鼻子 */
+    .nose {
+      width: 8px;
+      height: 6px;
+      background: pink;
+      border-radius: 50%;
+      position: absolute;
+      top: 40px;
+      left: 36px;
+    }
+  </style>
 </head>
 <body>
-<h1>🐹 打地鼠遊戲</h1>
-<p>看到地鼠就點擊牠！</p>
 
+  <h1>🐹 打地鼠遊戲</h1>
+  <p>看到地鼠就點牠</p>
 
-<div class="game">
-<div class="hole"><div class="mole"><div class="nose"></div></div></div>
-<div class="hole"><div class="mole"><div class="nose"></div></div></div>
-<div class="hole"><div class="mole"><div class="nose"></div></div></div>
-<div class="hole"><div class="mole"><div class="nose"></div></div></div>
-<div class="hole"><div class="mole"><div class="nose"></div></div></div>
-<div class="hole"><div class="mole"><div class="nose"></div></div></div>
-<div class="hole"><div class="mole"><div class="nose"></div></div></div>
-<div class="hole"><div class="mole"><div class="nose"></div></div></div>
-<div class="hole"><div class="mole"><div class="nose"></div></div></div>
-</div>
+  <div class="game">
+    <div class="hole"><div class="mole"><div class="eye left"></div><div class="eye right"></div><div class="nose"></div></div></div>
+    <div class="hole"><div class="mole"><div class="eye left"></div><div class="eye right"></div><div class="nose"></div></div></div>
+    <div class="hole"><div class="mole"><div class="eye left"></div><div class="eye right"></div><div class="nose"></div></div></div>
+    <div class="hole"><div class="mole"><div class="eye left"></div><div class="eye right"></div><div class="nose"></div></div></div>
+    <div class="hole"><div class="mole"><div class="eye left"></div><div class="eye right"></div><div class="nose"></div></div></div>
+    <div class="hole"><div class="mole"><div class="eye left"></div><div class="eye right"></div><div class="nose"></div></div></div>
+    <div class="hole"><div class="mole"><div class="eye left"></div><div class="eye right"></div><div class="nose"></div></div></div>
+    <div class="hole"><div class="mole"><div class="eye left"></div><div class="eye right"></div><div class="nose"></div></div></div>
+    <div class="hole"><div class="mole"><div class="eye left"></div><div class="eye right"></div><div class="nose"></div></div></div>
+  </div>
 
+  <script>
+    const moles = document.querySelectorAll('.mole');
+    let current = -1;
 
-<audio id="hitSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
+    function showMole() {
+      // 全部藏起來
+      moles.forEach(m => m.style.display = 'none');
 
+      // 換一隻（輪流）
+      current = (current + 1) % moles.length;
+      moles[current].style.display = 'block';
+    }
 
-<script>
-const holes = document.querySelectorAll('.hole');
-const moles = document.querySelectorAll('.mole');
-const sound = document.getElementById('hitSound');
+    moles.forEach(mole => {
+      mole.addEventListener('click', () => {
+        mole.style.display = 'none';
+      });
+    });
 
+    setInterval(showMole, 800);
+  </script>
 
-function randomHole() {
-return holes[Math.floor(Math.random() * holes.length)];
-}
-
-
-function showMole() {
-const hole = randomHole();
-hole.classList.add('up');
-
-
-setTimeout(() => {
-hole.classList.remove('up');
-}, 900);
-}
-
-
-moles.forEach(mole => {
-mole.addEventListener('click', () => {
-sound.currentTime = 0;
-sound.play();
-mole.parentElement.classList.remove('up');
-});
-});
-
-
-setInterval(showMole, 1000);
-</script>
 </body>
 </html>
