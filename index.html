@@ -195,5 +195,12 @@
   window.addEventListener('load', startGame);
 </script>
 
+<script>
+// 最高分
+let highScore = localStorage.getItem('highScore') || 0;
+document.getElementById('score').insertAdjacentHTML('afterend', ` / 最高分：<span id="high">${highScore}</span>`);
+const highEl = document.getElementById('high');
+let canHit = true;
+</script>
 </body>
 </html>
